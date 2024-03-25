@@ -19,7 +19,7 @@ func initAll() {
 type KeySizeError int
 
 func (k KeySizeError) Error() string {
-    return fmt.Sprintf("cryptobin/e2: invalid key size %d", int(k))
+    return fmt.Sprintf("e2: invalid key size %d", int(k))
 }
 
 type e2Cipher struct {
@@ -50,15 +50,15 @@ func (this *e2Cipher) BlockSize() int {
 
 func (this *e2Cipher) Encrypt(dst, src []byte) {
     if len(src) < BlockSize {
-        panic("cryptobin/e2: input not full block")
+        panic("e2: input not full block")
     }
 
     if len(dst) < BlockSize {
-        panic("cryptobin/e2: output not full block")
+        panic("e2: output not full block")
     }
 
     if subtle.InexactOverlap(dst[:BlockSize], src[:BlockSize]) {
-        panic("cryptobin/e2: invalid buffer overlap")
+        panic("e2: invalid buffer overlap")
     }
 
     encSrc := bytesToUint32s(src)
@@ -72,15 +72,15 @@ func (this *e2Cipher) Encrypt(dst, src []byte) {
 
 func (this *e2Cipher) Decrypt(dst, src []byte) {
     if len(src) < BlockSize {
-        panic("cryptobin/e2: input not full block")
+        panic("e2: input not full block")
     }
 
     if len(dst) < BlockSize {
-        panic("cryptobin/e2: output not full block")
+        panic("e2: output not full block")
     }
 
     if subtle.InexactOverlap(dst[:BlockSize], src[:BlockSize]) {
-        panic("cryptobin/e2: invalid buffer overlap")
+        panic("e2: invalid buffer overlap")
     }
 
     encSrc := bytesToUint32s(src)

@@ -4,6 +4,8 @@ import (
     "fmt"
     "sync"
     "crypto/cipher"
+
+    "github.com/pedroalbanese/e2/internal/subtle"
 )
 
 const BlockSize = 16
@@ -55,6 +57,10 @@ func (this *e2Cipher) Encrypt(dst, src []byte) {
         panic("cryptobin/e2: output not full block")
     }
 
+    if subtle.InexactOverlap(dst[:BlockSize], src[:BlockSize]) {
+        panic("cryptobin/e2: invalid buffer overlap")
+    }
+
     encSrc := bytesToUint32s(src)
     encDst := make([]uint32, len(encSrc))
 
@@ -71,6 +77,10 @@ func (this *e2Cipher) Decrypt(dst, src []byte) {
 
     if len(dst) < BlockSize {
         panic("cryptobin/e2: output not full block")
+    }
+
+    if subtle.InexactOverlap(dst[:BlockSize], src[:BlockSize]) {
+        panic("cryptobin/e2: invalid buffer overlap")
     }
 
     encSrc := bytesToUint32s(src)
